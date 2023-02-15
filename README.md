@@ -12,5 +12,3 @@ To build the bot, you need to have the following installed:
 To setup the bot, you need to create the following files:
 - .env (see examples/.env.example)
 - config.ini (see examples/config.ini.example)
-
-Test
