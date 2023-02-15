@@ -13,4 +13,3 @@ To setup the bot, you need to create the following files:
 - .env (see examples/.env.example)
 - config.ini (see examples/config.ini.example)
 
-This is an Test sry
