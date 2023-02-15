@@ -1,4 +1,4 @@
-# RST Carrier Services Dicord Bot
+# RST Carrier Services Discord Bot
 
 This is the Discord Bot for the Ruehrstaat Sqadron Discord Server.
 
