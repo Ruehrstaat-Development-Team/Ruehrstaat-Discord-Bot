@@ -78,3 +78,22 @@ def getCarrierListEmbed(carriers, isAdmin=False):
     view = View()
     view.add_item(Button(label="See all carriers", url=f"https://ruehrstaat.de/carrier/", style=ButtonStyle.success))
     return embed, view
+
+
+def infoLinksEmbed():
+    embed = Embed(title="Info Links")
+    embed.color = 0xffb400
+    embed.set_footer(text=f"Info by Ruherstaat Discord Bot")
+    embed.add_field(name="Ruehrstaat Website", value="https://ruehrstaat.de", inline=False)
+    embed.add_field(name="Ruhrstaat Carrier Website", value="https://ruehrstaat.de/carrier", inline=False)
+    embed.add_field(name="ED Star Map", value="https://edsm.net", inline=False)
+    embed.add_field(name="EDDB", value="https://eddb.io", inline=False)
+    embed.add_field(name="EDMC", value="https://edmc.io", inline=False)
+    embed.add_field(name="EDSY", value="https://edsy.org", inline=False)
+    embed.add_field(name="Coriolis", value="https://coriolis.io", inline=False)
+    embed.add_field(name="ED Shipyard", value="https://edshipyard.com", inline=False)
+    embed.add_field(name="Inara", value="https://inara.cz", inline=False)
+    embed.add_field(name="Commanders Toolbox", value="https://cmdrs-toolbox.com", inline=False)
+    embed.add_field(name="Spansh", value="https://spansh.co.uk", inline=False)
+    view = View()
+    return embed, view

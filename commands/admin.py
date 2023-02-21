@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from database.engine import DB
 import database.models as models
 import logging
-from embeds import getCarrierInfoStaticEmbed
+from embeds import getCarrierInfoStaticEmbed, infoLinksEmbed
 
 
 def initAdminCommands(bot, args_dict):
@@ -92,3 +92,15 @@ def initAdminCommands(bot, args_dict):
         selectmessage = await interaction.response.send_message("Select a Carrier", view=view, ephemeral=True)
 
         # TODO add Refresh Command for manual refresh of the marketname cache
+
+
+        @bot.slash_command(name="setinfochannels", description="Sets the channel for the static info embed", guild_ids=[TESTING_GUILD_ID], default_member_permissions=Permissions(administrator=True))
+        async def setinfochannels(interaction: Interaction):
+            discord_channel = interaction.channel
+            discord_guild = interaction.guild
+            logging.info(
+                f"Info channel set to {discord_channel.id} for guild {discord_guild.id}")
+            await interaction.response.send_message(f"Info Channel Set", ephemeral=True)
+            embed, view = infoLinksEmbed()
+            await discord_channel.send(embed=embed, view=view, ephemeral=True) # For Debugging Ephermeral
+            return None

@@ -79,6 +79,22 @@ def initCaptainCommands(bot, args_dict):
         view = View()
         view.add_item(selectOption)
         selectmessage = await interaction.response.send_message(f"Select an option for carrier {carrierName}", view=view, ephemeral=True)
+
+    # bot command to get the passengerrole of a specific carrier
+    @bot.slash_command(name="getpassengerrole", description="Get the passenger role of a carrier", guild_ids=[TESTING_GUILD_ID])
+    async def getpassengerrole(interaction: Interaction, carrierName: str = SlashOption(name="carrier_name", description="The Carrier that get's a new Passenger")):
+        carrierName = formatCarrierName(carrierName)
+        if not carrierName:
+            await interaction.response.send_message("Carrier not found!", ephemeral=True)
+            return
+
+        carrier = getCarrierObjectByName(carrierName, True)
+
+        if not carrier:
+            await interaction.response.send_message("Carrier not found!", ephemeral=True)
+            return
+
+        await interaction.response.send_message(f"The passenger role of {carrier.name} is {carrier.passengerRoleID}", ephemeral=True)
   
             
     
