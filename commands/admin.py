@@ -94,8 +94,8 @@ def initAdminCommands(bot, args_dict):
         # TODO add Refresh Command for manual refresh of the marketname cache
 
 
-    @bot.slash_command(name="setinfochannels", description="Sets the channel for the static info embed", guild_ids=[TESTING_GUILD_ID], default_member_permissions=Permissions(administrator=True))
-    async def setinfochannels(interaction: Interaction):
+    @bot.slash_command(name="setinfochannel", description="Sets the channel for the static info embed", guild_ids=[TESTING_GUILD_ID], default_member_permissions=Permissions(administrator=True))
+    async def setinfochannel(interaction: Interaction):
         discord_channel = interaction.channel
         discord_guild = interaction.guild
         logging.info(
