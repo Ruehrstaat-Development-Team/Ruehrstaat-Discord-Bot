@@ -94,13 +94,13 @@ def initAdminCommands(bot, args_dict):
         # TODO add Refresh Command for manual refresh of the marketname cache
 
 
-        @bot.slash_command(name="setinfochannels", description="Sets the channel for the static info embed", guild_ids=[TESTING_GUILD_ID], default_member_permissions=Permissions(administrator=True))
-        async def setinfochannels(interaction: Interaction):
-            discord_channel = interaction.channel
-            discord_guild = interaction.guild
-            logging.info(
-                f"Info channel set to {discord_channel.id} for guild {discord_guild.id}")
-            await interaction.response.send_message(f"Info Channel Set", ephemeral=True)
-            embed, view = infoLinksEmbed()
-            await discord_channel.send(embed=embed, view=view, ephemeral=True) # For Debugging Ephermeral
-            return None
+    @bot.slash_command(name="setinfochannels", description="Sets the channel for the static info embed", guild_ids=[TESTING_GUILD_ID], default_member_permissions=Permissions(administrator=True))
+    async def setinfochannels(interaction: Interaction):
+        discord_channel = interaction.channel
+        discord_guild = interaction.guild
+        logging.info(
+            f"Info channel set to {discord_channel.id} for guild {discord_guild.id}")
+        await interaction.response.send_message(f"Info Channel Set", ephemeral=True)
+        embed, view = infoLinksEmbed()
+        await discord_channel.send(embed=embed, view=view)
+        return None

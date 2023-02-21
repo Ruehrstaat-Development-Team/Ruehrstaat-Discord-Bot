@@ -88,7 +88,7 @@ def infoLinksEmbed():
     embed.add_field(name="Ruhrstaat Carrier Website", value="https://ruehrstaat.de/carrier", inline=False)
     embed.add_field(name="ED Star Map", value="https://edsm.net", inline=False)
     embed.add_field(name="EDDB", value="https://eddb.io", inline=False)
-    embed.add_field(name="EDMC", value="https://edmc.io", inline=False)
+    embed.add_field(name="EDMC", value="https://github.com/EDCD/EDMarketConnector", inline=False)
     embed.add_field(name="EDSY", value="https://edsy.org", inline=False)
     embed.add_field(name="Coriolis", value="https://coriolis.io", inline=False)
     embed.add_field(name="ED Shipyard", value="https://edshipyard.com", inline=False)
