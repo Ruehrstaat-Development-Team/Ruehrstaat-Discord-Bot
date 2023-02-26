@@ -1,8 +1,8 @@
 from nextcord import Embed, ButtonStyle
 from nextcord.ui import View, Button
-
+import logging
+from helpfunctions import assignPassengerRole
 from caching import getCarrierObjectByID
-
 from datetime import datetime
 
 def getCarrierInfoEmbed(carrier_id):
@@ -32,6 +32,7 @@ def getCarrierInfoEmbed(carrier_id):
         view.add_item(Button(label="See all carriers", url=f"https://ruehrstaat.de/carrier/", style=ButtonStyle.success))
     return embed, view
 
+
 def getCarrierInfoStaticEmbed(carrier_id):
     
     carrier = getCarrierObjectByID(carrier_id)
@@ -59,7 +60,13 @@ def getCarrierInfoStaticEmbed(carrier_id):
     else:
         view.add_item(Button(label="See all carriers", url=f"https://ruehrstaat.de/carrier/", style=ButtonStyle.success))
     getpassengerrole = "Placeholder" # TODO: Passengerroles from DB
-    view.add_item(Button(label="Passenger-Role", style=ButtonStyle.success)) # TODO: Callback function
+    button = Button(label="Get Passenger Role", style=ButtonStyle.success, custom_id="getpassengerrole")
+    button.callback = assignPassengerRole
+    view.add_item(button)
+    logging.info("Button Passenger added")
+
+
+ 
     return embed, view
 
 def getCarrierListEmbed(carriers, isAdmin=False):
@@ -91,7 +98,6 @@ def infoLinksEmbed():
     embed.add_field(name="EDMC", value="https://github.com/EDCD/EDMarketConnector", inline=False)
     embed.add_field(name="EDSY", value="https://edsy.org", inline=False)
     embed.add_field(name="Coriolis", value="https://coriolis.io", inline=False)
-    embed.add_field(name="ED Shipyard", value="https://edshipyard.com", inline=False)
     embed.add_field(name="Inara", value="https://inara.cz", inline=False)
     embed.add_field(name="Commanders Toolbox", value="https://cmdrs-toolbox.com", inline=False)
     embed.add_field(name="Spansh", value="https://spansh.co.uk", inline=False)
