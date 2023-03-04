@@ -16,7 +16,7 @@ def initMarketCommands(bot, args_dict):
     marketitemname: str = SlashOption(name="commodity", description="Commodities Selection"), marketitemvalue: int = SlashOption(name="value", description="Value of the Commodity"), marketitemamount: int = SlashOption(name="amount", description="Amount of the Commodity"),
     station: str = SlashOption(name="station", description="Station Selection"), system: str = SlashOption(name="system", description="System Selection"), trade_type: str = SlashOption(name="tradetype", description="Trade Type Selection")):
         opened_by = interaction.user.mention
-        owner = "PLACEHOLDER" # TODO: implement Command to get owner from Database
+        owner = "PLACEHOLDER" # TODO: implement Command to get owner from Database and write Market Data to Database via database.datacontroller.py
         if marketitemamount <= 0:
             await interaction.response.send_message("Amount must be greater than 0", ephemeral=True)
         else: 

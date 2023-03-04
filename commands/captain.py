@@ -94,7 +94,7 @@ def initCaptainCommands(bot, args_dict):
             await interaction.response.send_message("Carrier not found!", ephemeral=True)
             return
 
-        await interaction.response.send_message(f"The passenger role of {carrier.name}", ephemeral=True)
+        await interaction.response.send_message(f"The passenger role of {carrier.name} has been set to your Account", ephemeral=True)
   
             
     
