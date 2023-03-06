@@ -10,6 +10,8 @@ CARRIER_INFO = {}
 
 # request list of services from api
 def getServices():
+    if len(CARRIER_SERVICES) > 0:
+        return CARRIER_SERVICES
     url = API_URL + 'getAllServices'
     headers = {'Authorization': 'Bearer ' + os.getenv("READ_API_KEY")}
     response = requests.get(url, headers=headers)
@@ -18,8 +20,9 @@ def getServices():
         for service in services:
             CARRIER_SERVICES[service["name"]] = CarrierService(service["name"], service["label"], service["description"], bool(service["odyssey"]))
             logging.debug("Added Service: " + service["name"])
+        return CARRIER_SERVICES
     else:
-        return None
+        raise Exception("Could not get Services from API")
 getServices()
 
 def __getCarrierInfo():
@@ -146,6 +149,43 @@ class Carrier:
             return True
         else:
             logging.error("Error updating carrier dockingAccess in API")
+            return False
+        
+    def changeServiceState(self, serviceName, discord_id):
+        if serviceName in CARRIER_SERVICES:
+            operation = None
+            if CARRIER_SERVICES[serviceName] in self.services:
+                self.services.remove(CARRIER_SERVICES[serviceName])
+                operation = "deactivate"
+            else:
+                self.services.append(CARRIER_SERVICES[serviceName])
+                operation = "activate"
+            # write to api
+            url = API_URL + 'carrierService'
+            headers = {'Authorization': 'Bearer ' + os.getenv("WRITE_API_KEY")}
+            data = {
+                "id": self.id,
+                "operation": operation,
+                "service": serviceName,
+                "source": "discord",
+                "discord_id": discord_id
+            }
+            response = requests.put(url, headers=headers, data=data)
+            if response.status_code == 200:
+                logging.debug("Successfully updated carrier services in API")
+                return True
+            else:
+                logging.error("Error updating carrier services in API")
+                return False
+        else:
+            logging.error("Invalid service name: " + serviceName)
+            return False
+        
+    def hasCarrierService(self, serviceName):
+        if serviceName in CARRIER_SERVICES:
+            return CARRIER_SERVICES[serviceName] in self.services
+        else:
+            logging.error("Invalid service name: " + serviceName)
             return False
         
 

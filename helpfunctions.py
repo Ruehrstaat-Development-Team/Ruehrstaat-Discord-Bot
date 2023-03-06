@@ -1,7 +1,6 @@
 from caching import getAllCarrierNamesAsList
 from difflib import get_close_matches
 import logging
-from embeds import getCarrierInfoStaticEmbed
 from nextcord import Interaction
 
 def formatCarrierName(carrierName):
@@ -19,6 +18,7 @@ def formatCarrierName(carrierName):
 
 # TODO: carrier refresh method to refresh the static embeds with args from the websocket event or nothing to refresh all
 def refreshCarrierEmbeds(bot, args_dict, carrier_id=None):
+    from embeds import getCarrierInfoStaticEmbed
     db = args_dict["db"]
     cursor = db.cursor
     logging.info("refreshing carrier embeds")

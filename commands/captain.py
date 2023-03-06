@@ -4,7 +4,7 @@ from nextcord.ui import Select, View, TextInput, Modal
 from helpfunctions import formatCarrierName
 from caching import getCarrierObjectByName
 
-from classes.carrier import Carrier, getCarrierInfo
+from classes.carrier import Carrier, getCarrierInfo, getServices
 
 from permission import isUserAdmin
 
@@ -41,6 +41,29 @@ async def captainCommandEditDockingAccess(interaction: Interaction, carrier: Car
     view.add_item(selectOption)
     selectmessage = await interaction.response.send_message(f"Select a new Docking Access for {carrier.name}", view=view, ephemeral=True)
 
+async def captainCommandEditServices(interaction: Interaction, carrier: Carrier):
+    allServiceClasses = getServices()
+    print(allServiceClasses)
+    allServices = {allServiceClasses[service].name: {"name": allServiceClasses[service].name, "label": allServiceClasses[service].label} for service in allServiceClasses}
+    for name, service in allServices.items():
+        service["enabled"] = carrier.hasCarrierService(name)
+        print(service["enabled"])
+    # create a select with all services and the current state (enabled if exists in carrier.services), when a service is selected, change the state
+    selectmessage = None
+    view = View()
+    selectOption = Select(placeholder="Select an option", options=[SelectOption(label=service["label"] + " - " + ("enabled" if service["enabled"] else "disabled"), value=service["name"]) for name, service in allServices.items()])
+    async def callback(interaction: Interaction):
+        await interaction.response.defer()
+        service = allServices[selectOption.values[0]]
+        carrier.changeServiceState(service["name"], interaction.user.id)
+        service["enabled"] = not service["enabled"]
+        selectOption.options = [SelectOption(label=service["label"] + " - " + ("enabled" if service["enabled"] else "disabled"), value=service["name"]) for name, service in allServices.items()]
+        await selectmessage.edit(view=view)
+    selectOption.callback = callback
+    view.add_item(selectOption)
+    selectmessage = await interaction.response.send_message(f"Select a new Docking Access for {carrier.name}", view=view, ephemeral=True)
+
+
 def initCaptainCommands(bot, args_dict):
         
     TESTING_GUILD_ID = args_dict["TESTING_GUILD_ID"]
@@ -58,7 +81,7 @@ def initCaptainCommands(bot, args_dict):
             await interaction.response.send_message("You are not the Captain!", ephemeral=True)
             return
 
-        options = ["Edit Location", "Edit Docking Access"]
+        options = ["Edit Location", "Edit Docking Access", "Enable/Disable Services"]
 
         selectOption = Select(placeholder="Select an option", options=[SelectOption(label=option, value=option) for option in options])
         selectmessage = None
@@ -74,6 +97,8 @@ def initCaptainCommands(bot, args_dict):
                 await captainCommandEditLocation(interaction, carrier)
             elif option == "Edit Docking Access":
                 await captainCommandEditDockingAccess(interaction, carrier)
+            elif option == "Enable/Disable Services":
+                await captainCommandEditServices(interaction, carrier)
 
         selectOption.callback = callback
         view = View()
