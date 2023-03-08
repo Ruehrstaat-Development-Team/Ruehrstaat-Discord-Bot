@@ -5,6 +5,7 @@ from caching import getCarrierIdByName, getCarrierObjectByID, getAllCarrierNames
 from sqlalchemy.orm import Session
 from database.engine import DB
 import database.models as models
+import database.datacontroller as datacontroller
 import logging
 from embeds import getCarrierInfoStaticEmbed, infoLinksEmbed
 
@@ -50,36 +51,7 @@ def initAdminCommands(bot, args_dict):
                 return
             await selectmessage.delete()
             discord_channel = interaction.channel
-            discord_guild = interaction.guild
-            discord_role = await discord_guild.create_role(name="Passenger: " + getCarrierObjectByID(carrier_id).name)
-            db = DB()
-            with Session(db.engine) as session:
-                channel = session.query(models.Discord_Channel).filter_by(
-                    id=discord_channel.id).first()
-                if (channel == None):
-                    channel = models.Discord_Channel(id=discord_channel.id,
-                                                    name=discord_channel.name,
-                                                    jump_url=discord_channel.jump_url,
-                                                    mention=discord_channel.mention)
-                    guild = session.query(models.Discord_Guild).filter_by(
-                        id=discord_guild.id).first()
-                    if (guild == None):
-                        guild = models.Discord_Guild(id=discord_guild.id,
-                                             name=discord_guild.name)
-                    channel.guild = guild
-                else:
-                    guild = channel.guild
-                carrierDiscordChannel = models.Carrier_Discord_Channel(
-                    carrier_market_id=carrier_id,
-                    type="static",
-                    channel=channel,
-                    role=models.Discord_Role(
-                        id=discord_role.id, name=discord_role.name, mention=discord_role.mention, managed=True, guild = guild)
-                )
-                session.add(carrierDiscordChannel)
-                session.commit()
-            logging.info(
-                f"Carrier channel set to {discord_channel.id} for guild {discord_guild.id}")
+            datacontroller.setStaticCarrierChannel(interaction.channel, carrier_id);
             await interaction.response.send_message(f"Carrier Channel Set for Carrier " + getCarrierObjectByID(carrier_id).name, ephemeral=True)
             embed, view = getCarrierInfoStaticEmbed(carrier_id)
             await discord_channel.send(embed=embed, view=view)
