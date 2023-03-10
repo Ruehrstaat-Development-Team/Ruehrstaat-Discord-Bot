@@ -5,7 +5,7 @@ from caching import getCarrierIdByName, getCarrierObjectByID, getAllCarrierNames
 from sqlalchemy.orm import Session
 from database.engine import DB
 import database.models as models
-import database.datacontroller as datacontroller
+import database.ChannelDataController as ChannelDataController
 import logging
 from embeds import getCarrierInfoStaticEmbed, infoLinksEmbed
 
@@ -51,7 +51,7 @@ def initAdminCommands(bot, args_dict):
                 return
             await selectmessage.delete()
             discord_channel = interaction.channel
-            datacontroller.setStaticCarrierChannel(interaction.channel, carrier_id);
+            ChannelDataController.setStaticCarrierChannel(interaction.channel, carrier_id);
             await interaction.response.send_message(f"Carrier Channel Set for Carrier " + getCarrierObjectByID(carrier_id).name, ephemeral=True)
             embed, view = getCarrierInfoStaticEmbed(carrier_id)
             await discord_channel.send(embed=embed, view=view)
